@@ -60,6 +60,15 @@ group "make defconfig"
 make defconfig
 endgroup
 
+group "golang 1.24.x"
+rm -rf feeds/packages/net/v2ray-geodata
+rm -rf feeds/packages/lang/golang/golang
+git clone https://github.com/JohnsonRan/packages_lang_golang feeds/packages/lang/golang/golang
+# hack xdp
+sed -i '/KERNEL_XDP_SOCKETS/d' package/kernel/linux/modules/netsupport.mk
+sed -i 's/xsk_diag\.ko/xsk_diag.ko@le1.0/g' package/kernel/linux/modules/netsupport.mk
+endgroup
+
 if [ -z "$PACKAGES" ]; then
 	# compile all packages in feed
 	for FEED in $ALL_CUSTOM_FEEDS; do
